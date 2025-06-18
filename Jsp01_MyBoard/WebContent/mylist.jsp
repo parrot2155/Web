@@ -8,12 +8,13 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+
+</head>
+<body>
 <%
 	MyBoardDao dao = new MyBoardDao();
 	List<MyBoard> list = dao.selectAll();
 %>
-</head>
-<body>
 	<h1>LIST PAGE</h1>
 	<!-- db에 저장된 데이터를 조회하여 목록으로 보여줄 페이지 -->
 	<table border="1">
@@ -30,7 +31,7 @@
 		<tr>
 			<td><%=list.get(i).getMyno() %></td>
 			<td><%=list.get(i).getMyname() %></td>
-			<td><%=list.get(i).getMytitle() %></td>
+			<td><a href="selectone.jsp?myno=<%=list.get(i).getMyno()%>"><%=list.get(i).getMytitle() %></a></td>
 			<td><%=list.get(i).getMydate() %></td>
 		</tr>
 <%
@@ -46,7 +47,7 @@
 	</table>
 	<!-- <script type="text/javascript">
 		function write(){
-			loication.href='myinsert.jsp'
+			location.href='myinsert.jsp'
 		}
 	</script> -->
 	
