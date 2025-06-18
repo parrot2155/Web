@@ -36,12 +36,19 @@
 	<tr>
 		<td colspan="2">
 			<button onclick="location.href='myupdate.jsp?myno=<%=dto.getMyno()%>'">수정</button>&nbsp;&nbsp;
-			<button onclick="">삭제</button>&nbsp;&nbsp;
+			<button onclick="del();">삭제</button>&nbsp;&nbsp;
 			<button onclick="location.href='mylist.jsp'">목록</button>
 		</td>
 	</tr>
 	
 </table>
+<script type="text/javascript">
+	function del(){
+		if(window.confirm("삭제 하시겠습니까?")){
+			location.href="mydelete.jsp?myno=<%=dto.getMyno()%>"
+		}
+	}
+</script>
 </body>
 </html>
 

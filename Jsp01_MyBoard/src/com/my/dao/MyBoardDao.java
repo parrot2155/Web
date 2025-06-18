@@ -1,5 +1,10 @@
 package com.my.dao;
 
+import static common.JDBCTemplate.close;
+import static common.JDBCTemplate.commit;
+import static common.JDBCTemplate.getConnection;
+import static common.JDBCTemplate.rollback;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.my.dto.MyBoard;
-import static common.JDBCTemplate.*;
 
 public class MyBoardDao {
 	
@@ -115,7 +119,73 @@ public class MyBoardDao {
 		}
 		return res;
 	}
+	
+	// 수정
+	public int update(MyBoard dto) {
+		Connection con = getConnection();
+		PreparedStatement pstm = null;
+		int res = 0; 
+		String sql = "UPDATE MYBOARD SET MYTITLE=?, MYCONTENT=? WHERE MYNO=?";
+		
+		try {
+			pstm = con.prepareStatement(sql);
+			pstm.setString(1,dto.getMytitle());
+			pstm.setString(2,dto.getMycontent());
+			pstm.setInt(3,dto.getMyno());
+			System.out.println("3. query 준비: "+sql);
+			res = pstm.executeUpdate();
+			System.out.println("4. query 실행 및 리턴");
+			
+			if(res>0) {
+				commit(con);
+			}else {
+				rollback(con);
+			}
+		} catch (SQLException e) {
+			System.out.println("3, 4단계 에러");
+			e.printStackTrace();
+		}finally {
+			close(pstm);
+			close(con);
+			System.out.println("5. db 종료\n");
+		}
 
+		return res;
+		
+	}
+	
+	public int delete(int myno) {
+		Connection con = getConnection();
+		PreparedStatement pstm = null;
+		int res = 0;
+		
+		String sql = " DELETE FROM MYBOARD WHERE MYNO=? ";
+		
+		try {
+			pstm = con.prepareStatement(sql);
+			pstm.setInt(1, myno);
+			
+			res = pstm.executeUpdate();
+			System.out.println("4. query 실행 및 리턴");
+			
+			if(res>0) {
+				commit(con);
+			}else {
+				rollback(con);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("3, 4 단계 에러");
+			e.printStackTrace();
+		}finally {
+			close(pstm);
+			close(con);
+			System.out.println("5. 종료");
+		}
+		
+		return res;
+		
+	}
 
 
 }

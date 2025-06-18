@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
 <% request.setCharacterEncoding("UTF-8"); %>
 <% response.setContentType("text/html; charset=UTF-8"); %>
 
 <%@ page import="com.my.dao.MyBoardDao" %>
 <%@ page import="com.my.dto.MyBoard" %>
-
+  
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,54 +14,30 @@
 <title>Insert title here</title>
 </head>
 <body>
-<!-- myupdate페이지에서 넘어오는 parameter 받아 dao를 통해 update 진행 후 결과 처리 -->
-
-<%
+<!-- selectone페이지에서 넘어오는 parameter값 myno를 받아 dao를 통해 진행하고 결과값 화면 처리 -->
+<% 
 	int myno = Integer.parseInt(request.getParameter("myno"));
-	String mytitle = request.getParameter("mytitle");
-	String mycontent = request.getParameter("mycontent");
-	
-	MyBoard dto = new MyBoard(myno, null, mytitle, mycontent, null);
-	
 	MyBoardDao dao = new MyBoardDao();
-	int res = dao.update(dto);
+	int res = dao.delete(myno);
 	
 	if(res>0){
-%>  
+%>
 	<script type="text/javascript">
-		alert("글 수정 성공")
-		location.href="selectone.jsp?myno=<%=dto.getMyno()%>";
-	</script>		
+		alert("글 삭제 성공");
+		location.href="mylist.jsp";
+	</script>
 <%
 	}else{
 %>
-	<script type="text/javascript">
-		alert("글 수정 실패")
-		location.href="myupdate.jsp?myno=<%=dto.getMyno()%>";
-	</script>
+		<script type="text/javascript">
+			alert("글 삭제 실패");
+			location.href="mylist.jsp";
+		</script>
 <%
 	}
 %>
-
-
-
-
-
-
-
-
-
-
-
-
-
 </body>
 </html>
-
-
-
-
-
 
 
 
