@@ -14,8 +14,11 @@
 	<!-- parameter값을 받아 dao에 delete 실행 후 결과를 처리 -->
 <%
 	int seq = Integer.parseInt(request.getParameter("seq"));
-	
+	//int[] seq = request.getParameter("seq");
+	///String[] result = new BoardDao().multiDelete(seq);
 	int res = new BoardDao().delete(seq);
+	//삭제 진행 시 multidelete()활용하여 삭제
+	
 	
 	if(res>0){
 %>

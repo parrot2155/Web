@@ -173,4 +173,47 @@ public class BoardDao {
 		}
 		return res;
 	}
+	//다중삭제
+	public int multiDelete(String[] seq) {
+		Connection con = getConnection();
+		PreparedStatement pstm = null;
+		int res = 0;
+		int[] cnt = null;
+		
+		String sql = " DELETE FROM BOARD WHERE SEQ=? ";
+		//쿼리문을 작성하고 모아두고 일괄로 실행한다.
+		
+		try {
+			pstm = con.prepareStatement(sql);
+			
+			for(int i=0;i<seq.length;i++) {
+				pstm.setString(1, seq[i]);
+				pstm.addBatch();      //지금 값을 메모리에 쌓아둔다.
+				System.out.println("03.query 준비: "+sql+"(삭제할 번호: "+seq[i]+")");
+			}
+			cnt = pstm.executeBatch();
+			System.out.println("04.query 실행 및 리턴");
+			
+			//성공하면 각 방마다 1씩 저장(seq는 pk이기 때문에)
+			for(int i=0;i<cnt.length;i++) {
+				if(cnt[i] == 1) {
+					res++;
+				}
+			}
+			
+			if(seq.length==res) {
+				commit(con);
+			}else {
+				rollback(con);
+			}
+		} catch (SQLException e) {
+			System.out.println("3,4단계 에러");
+			e.printStackTrace();
+		}finally {
+			close(pstm);
+			close(con);
+			System.out.println("05. db 종료\n");
+		}
+		return res;
+	}
 }
