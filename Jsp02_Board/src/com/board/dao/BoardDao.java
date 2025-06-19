@@ -18,7 +18,7 @@ public class BoardDao {
 		Statement stmt = null;
 		ResultSet rs = null;
 		List<BoardDto> res = new ArrayList<>();
-		String sql = " SELECT * FROM BOARD ORDER BY SEQ DESC";
+		String sql = " SELECT * FROM BOARD ORDER BY SEQ";
 		
 		try {
 			stmt = con.createStatement();
@@ -85,22 +85,92 @@ public class BoardDao {
 	
 	//글 추가
 	public int insert(BoardDto dto) {
+		Connection con = getConnection();
+		PreparedStatement pstm = null;
+		int res = 0;
+		String sql = " INSERT INTO BOARD VALUES(SEQ_BOARD.NEXTVAL, ?, ?, ?,SYSDATE) ";
 		
-		
-		
-		
-		return 0;
-		
+		try {
+			pstm = con.prepareStatement(sql);
+			pstm.setString(1, dto.getWriter());
+			pstm.setString(2, dto.getTitle());
+			pstm.setString(3, dto.getContent());
+			System.out.println("03. query 준비: "+sql);
+			res = pstm.executeUpdate();
+			System.out.println("04. query 실행 및 리턴");
+			
+			if(res>0) {
+				commit(con);
+			}else {
+				rollback(con);
+			}
+		} catch (SQLException e) {
+			System.out.println("3,4단계 에러");
+			e.printStackTrace();
+		}finally {
+			close(pstm);
+			close(con);
+		}
+		return res;
 	}
 	
 	//글 수정
 	public int update(BoardDto dto) {
-		return 0;
+		Connection con = getConnection();
+		String sql = " UPDATE BOARD SET TITLE=?, CONTENT=? WHERE SEQ=? ";
+		PreparedStatement pstm = null;
+		int res = 0;
+		try {
+			pstm = con.prepareStatement(sql);
+			pstm.setString(1, dto.getTitle());
+			pstm.setString(2, dto.getContent());
+			pstm.setInt(3,dto.getSeq());
+			System.out.println("03. query 준비 : "+sql);
+			
+			res = pstm.executeUpdate();
+			System.out.println("04. query 실행 및 리턴");
+			
+			if(res>0) {
+				commit(con);
+			}else {
+				rollback(con);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			close(pstm);
+			close(con);
+			System.out.println("05. db 종료");
+		}
+		return res;
 		
 	}
 	//글 삭제
 	public int delete(int seq) {
-		return 0;
-	
+		Connection con = getConnection();
+		PreparedStatement pstm = null;
+		int res = 0;
+		String sql = " DELETE FROM BOARD WHERE SEQ=? ";
+		
+		try {
+			pstm = con.prepareStatement(sql);
+			pstm.setInt(1, seq);
+			System.out.println("03. query 준비 : "+sql);
+			res = pstm.executeUpdate();
+			System.out.println("04. query 실행 및 리턴");
+			if(res>0) {
+				commit(con);
+			}else {
+				rollback(con);
+			}
+		} catch (SQLException e) {
+			System.out.println("3,4단계 오류");
+			e.printStackTrace();
+		}finally {
+			close(pstm);
+			close(con);
+			System.out.println("05. db 종료\n");
+		}
+		return res;
 	}
 }

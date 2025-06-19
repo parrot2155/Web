@@ -51,6 +51,11 @@
 		}
 	}
 %>
+	<tr>
+		<td colspan="5">
+			<input type="button" value="글쓰기" onclick="location.href='boardwrite.jsp'">
+		</td>
+	</tr>
 </table>
 </body>
 </html>

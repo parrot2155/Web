@@ -12,7 +12,7 @@ public class JDBCTemplate {
 		//1. 드라이버 등록
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-			System.out.println("1. driver 등록");
+			System.out.println("01. driver 등록");
 		} catch (ClassNotFoundException e) {
 			System.out.println("[Error] 드라이버 등록 실패");
 			e.printStackTrace();
@@ -25,7 +25,7 @@ public class JDBCTemplate {
 		
 		try {
 			con = DriverManager.getConnection(url,id,pw);
-			System.out.println("2. db 연결");
+			System.out.println("02. db 연결");
 			con.setAutoCommit(false);
 		} catch (SQLException e) {
 			System.out.println("[Error] DB연결 실패");
