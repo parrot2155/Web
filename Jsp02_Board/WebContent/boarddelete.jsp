@@ -17,7 +17,7 @@
 	//int[] seq = request.getParameter("seq");
 	///String[] result = new BoardDao().multiDelete(seq);
 	int res = new BoardDao().delete(seq);
-	//삭제 진행 시 multidelete()활용하여 삭제
+	//삭제 진행 시 multidelete()활용하여 삭제							//문제!
 	
 	
 	if(res>0){
