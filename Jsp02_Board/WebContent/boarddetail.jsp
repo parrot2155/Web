@@ -36,6 +36,9 @@
 	BoardDao dao = new BoardDao();
 	BoardDto dto = dao.selectOne(seq);
 %>
+
+<%@ include file="./form/header.jsp" %> <!-- 외부의 파일을 불러들일 수 있다. -->
+
 <div id="detailform">
 	<h1>Detail</h1>
 	<table>

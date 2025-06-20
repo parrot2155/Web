@@ -26,6 +26,9 @@
 	BoardDao dao = new BoardDao();
 	List<BoardDto> list = dao.selectAll();
 %>
+
+<%@ include file="./form/header.jsp" %>
+
 <h1>List</h1>
 <form action="muldel.jsp" method="get" id="muldelform">
 	<table>
@@ -35,6 +38,7 @@
 			<th>SEQ</th>
 			<th>WRITER</th>
 			<th>TITLE</th>
+			
 			<th>DATE</th>
 		</tr>
 	<%
@@ -68,6 +72,7 @@
 		</tr>
 	</table>
 </form>
+<%@ include file="./form/footer.jsp" %>
 </body>
 </html>
 
