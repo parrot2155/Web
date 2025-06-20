@@ -42,13 +42,85 @@
 		
 		request.setAttribute("dto",res);
 		pageContext.forward("boarddetail.jsp");
-	}else if(command.equals("boardinserform")){
+		
+	}else if(command.equals("boardinsertform")){
 		response.sendRedirect("boardinsert.jsp");
 		
 	}else if(command.equals("boardinsert")){
 		String writer = request.getParameter("writer");
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
+		
+		MVCBoardDto dto = new MVCBoardDto(0,writer,title,content,null);
+		int res = dao.insert(dto);
+		
+		String msg = "";
+		String url = "";
+		
+		if(res>0){
+			msg = "글 작성 성공";
+			url = "?command=boardlist";
+		}else{
+			msg="글 작성 실패";
+			url="?command=boardinsertform";
+		}
+		
+		request.setAttribute("msg", msg);
+		request.setAttribute("url", url);
+		pageContext.forward("result.jsp");
+		
+	}else if(command.equals("boardupdateform")){
+		int seq = Integer.parseInt(request.getParameter("seq"));
+		MVCBoardDto dto = dao.selectOne(seq);
+		
+		request.setAttribute("dto", dto);
+		pageContext.forward("boardupdate.jsp");
+		
+	}else if(command.equals("boardupdate")){
+		//넘어오는 parameter를 받아
+		String title = request.getParameter("title");
+		String content = request.getParameter("content");
+		int seq = Integer.parseInt(request.getParameter("seq"));
+		MVCBoardDto dto = new MVCBoardDto(seq,null,title,content,null);
+		//dao에 update를 진행하고 
+		//" UPDATE MVCBOARD SET TITLE=?, CONTENT=? WHERE SEQ=? "
+		int res = dao.update(dto);
+		//실행 결과에 따라 result페이지를 통해 화면처리한다.
+		
+		String msg = "";
+		String url = "";
+		
+		if(res>0){
+			msg = "게시글 수정 성공";
+			url = "?command=boarddetail&seq="+seq;
+		}else{
+			msg="게시글 수정 실패";
+			url="?command=boardupdateform&seq="+seq;
+		}
+		
+		request.setAttribute("msg", msg);
+		request.setAttribute("url", url);
+		pageContext.forward("result.jsp");
+		
+	}else if(command.equals("boarddelete")){
+		int seq = Integer.parseInt(request.getParameter("seq"));
+		int res = dao.delete(seq);
+		
+		String msg = "";
+		String url = "";
+		
+		if(res>0){
+			msg = "게시글 삭제 성공";
+			url = "?command=boardlist";
+		}else{
+			msg="게시글 삭제 실패";
+			url="?command=boarddetail&seq="+seq;
+		}
+		
+		request.setAttribute("msg", msg);
+		request.setAttribute("url", url);
+		pageContext.forward("result.jsp");
+		
 	}
 	
 %>

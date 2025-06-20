@@ -8,6 +8,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import com.mvc.dto.MVCBoardDto;
+
+import oracle.jdbc.proxy.annotation.Pre;
+
 import static common.JDBCTemplate.*;
 
 public class MVCBoardDao {
@@ -66,6 +69,7 @@ public class MVCBoardDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
+			close(rs);
 			close(pstm);
 			close(con);
 			System.out.println("05. db 종료");
@@ -74,15 +78,95 @@ public class MVCBoardDao {
 	}
 	
 	public int insert(MVCBoardDto dto) {
-		return 0;
+		String sql = " INSERT INTO MVCBOARD VALUES(SEQ_MVCBOARD.NEXTVAL, ?, ?, ?, SYSDATE) ";
+		Connection con = getConnection();
+		PreparedStatement pstm = null;
+		int res = 0;
+		
+		try {
+			pstm = con.prepareStatement(sql);
+			pstm.setString(1, dto.getWriter());
+			pstm.setString(2, dto.getTitle());
+			pstm.setString(3, dto.getContent());
+			System.out.println("03. query 준비: "+sql);
+			res = pstm.executeUpdate();
+			System.out.println("04. query 실행 및 리턴");
+			
+			if(res>0) {
+				commit(con);
+			}else {
+				rollback(con);
+			}
+		} catch (SQLException e) {
+			System.out.println("3,4번 단계 에러");
+			e.printStackTrace();
+		}finally {
+			close(pstm);
+			close(con);
+			System.out.println("05. db 종료");
+		}
+		return res;
 	}
 	
 	public int update(MVCBoardDto dto) {
-		return 0;
+		Connection con = getConnection();
+		PreparedStatement pstm = null;
+		int res = 0;
+		String sql = " UPDATE MVCBOARD SET TITLE=?, CONTENT=? WHERE SEQ=? ";
+		
+		try {
+			pstm = con.prepareStatement(sql);
+			pstm.setString(1, dto.getTitle());
+			pstm.setString(2, dto.getContent());
+			pstm.setInt(3, dto.getSeq());
+			System.out.println("03. query 준비: "+sql);
+			
+			res = pstm.executeUpdate();
+			System.out.println("04. query 실행 및 리턴");
+			
+			if(res>0) {
+				commit(con);
+			}else {
+				rollback(con);
+			}
+		} catch (SQLException e) {
+			System.out.println("3,4단계 에러");
+			e.printStackTrace();
+		}finally {
+			close(pstm);
+			close(con);
+			System.out.println("05. db 종료\n");
+		}
+		return res;
 	}
 	
 	public int delete(int seq) {
-		return 0;
+		Connection con = getConnection();
+		PreparedStatement pstm = null;
+		int res = 0;
+		String sql = " DELETE FROM MVCBOARD WHERE SEQ=? ";
+		
+		try {
+			pstm = con.prepareStatement(sql);
+			pstm.setInt(1, seq);
+			System.out.println("03. query 준비: "+sql);
+			res = pstm.executeUpdate();
+			System.out.println("04. query 실행 및 리턴");
+			
+			if(res>0) {
+				commit(con);
+			}else {
+				rollback(con);
+			}
+		} catch (SQLException e) {
+			System.out.println("3,4단계 에러");
+			e.printStackTrace();
+		}finally {
+			close(pstm);
+			close(con);
+			System.out.println("05. db 종료\n");
+		}
+		return res;
 	}
 	
 }

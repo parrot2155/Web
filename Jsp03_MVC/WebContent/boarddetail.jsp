@@ -36,6 +36,35 @@
 		<th>CONTENT</th>
 		<td><textarea rows="10" cols="40" readonly="readonly"><%=dto.getContent() %></textarea></td>
 	</tr>
+	<tr>
+		<td colspan="2">
+			<input type="button" value="수정" onclick="location.href='mycontroller.jsp?command=boardupdateform&seq=<%=dto.getSeq()%>'">
+			<input type="button" value="삭제" onclick="boardDel();">
+			<input type="button" value="목록" onclick="location.href='mycontroller.jsp?command=boardlist'">
+		</td>
+	</tr>
+	
 </table>
+
+<script type="text/javascript">
+	function boardDel(){
+		let seq = document.querySelectorAll("td")[0].textContent;
+		
+		if(window.confirm("정말 삭제하시겠습니까?")){
+			location.href="mycontroller.jsp?command=boarddelete&seq=<%=dto.getSeq()%>";
+		}
+	}
+</script>
+
+
 </body>
 </html>
+
+
+
+
+
+
+
+
+
