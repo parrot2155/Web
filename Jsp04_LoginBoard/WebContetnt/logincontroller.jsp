@@ -37,6 +37,8 @@
 			
 			if(dto.getMyrole().equals("ADMIN")){
 				response.sendRedirect("adminmain.jsp");
+			}else if(dto.getMyrole().equals("USER")){
+				response.sendRedirect("usermain.jsp");
 			}
 			
 		}else{
@@ -107,6 +109,7 @@
 		request.setAttribute("msg", msg);
 		request.setAttribute("url", url);
 		pageContext.forward("result.jsp");
+		
 	}
 	
 %>
