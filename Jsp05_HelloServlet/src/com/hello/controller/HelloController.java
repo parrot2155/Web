@@ -1,0 +1,45 @@
+package com.hello.controller;
+
+
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/hi") //어노테이션 방식을 사용하면 web.xml에서 별도로 매핑을 하지 않아도 된다.
+
+public class HelloController extends HttpServlet{
+	
+	//hello라는 요청이 get방식으로 넘어오면 실행됨
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		System.out.println("get 방식");
+		String command = request.getParameter("command");
+		System.out.println("command : "+command);
+		
+		response.setContentType("text/html; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.println("<h1 style='background-color:skyblue;'>HelloServlet</h1>");
+		out.println("<span>서블릿 연습</span>");
+		out.print("<a href='home.html'>돌아가기</a>");
+		
+	}
+	
+	//hello라는 요청이 post방식으로 넘어오면 실행됨
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");//한글 깨짐 방지 
+		response.setContentType("text/html; charset=UTF-8");
+		System.out.println("post 방식");
+		String command = request.getParameter("command");
+		System.out.println("command : "+command);
+		
+		response.sendRedirect("Test.jsp");
+	}
+	
+	
+}

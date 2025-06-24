@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>home.html</h1>
+	<a href="Test.jsp">Test.jsp</a><br>
+	<a href="hello">HelloController</a><br>
+	<a href="hello?command=hi">HelloController+param</a><br>
+	<form action="hello" method="post">
+		<input type="hidden" name="command" value="안녕">
+		<input type="submit" value="전송">
+	</form>
+	
+	<!--  -->
+	<a href="bye?command=bye">ByeController</a>
+	<!-- 1. bye라는 요청을 처리할 수 있는 서블릿 생성 (com.bye.controller.ByeController)-->
+	<!-- 2. 서블릿 내에서 parameter를 받아 콘솔창에 출력 -->
+	<br>
+	<form action="hi" method="post">
+		<input type="hidden" name="command" value="하이~">
+		<input type="submit" value="hi(post)">
+	</form>
+</body>
+</html>
