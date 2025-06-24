@@ -162,5 +162,80 @@ public class MyMemberDao extends JDBCTemplate{
 		return res;
 		
 	}
-	
+	public MyMemberDto selectMember(int myno) {
+		Connection con = getConnection();
+		PreparedStatement pstm = null;
+		MyMemberDto res = null;
+		ResultSet rs = null;
+		
+		String sql = " SELECT * FROM MYMEMBER WHERE MYNO=? ";
+		
+		try {
+			pstm = con.prepareStatement(sql);
+			pstm.setInt(1, myno);
+			System.out.println("03. query 준비: "+sql);
+			rs = pstm.executeQuery();
+			System.out.println("04. query 실행 및 리턴");
+			
+			while(rs.next()) {
+				res = new MyMemberDto();
+				res.setMyno(rs.getInt(1));
+				res.setMyid(rs.getString(2));
+				res.setMypw(rs.getString(3));
+				res.setMyname(rs.getString(4));
+				res.setMyaddr(rs.getString(5));
+				res.setMyphone(rs.getString(6));
+				res.setMyemail(rs.getString(7));
+				res.setMyenabled(rs.getString(8));
+				res.setMyrole(rs.getString(9));
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("3/4단계 에러");
+			e.printStackTrace();
+		}finally {
+			close(rs);
+			close(pstm);
+			close(con);
+			System.out.println("05. db 종료");
+		}
+		return res;
+		
+	}
+	public boolean updateMember(MyMemberDto dto) {
+		Connection con = getConnection();
+		PreparedStatement pstm = null;
+		int res = 0;
+		
+		String sql = " UPDATE MYMEMBER SET MYADDR=?, MYPHONE=?, MYEMAIL=? WHERE MYNO=? ";
+		
+		try {
+			pstm = con.prepareStatement(sql);
+			pstm.setString(1, dto.getMyaddr());
+			pstm.setString(2, dto.getMyphone());
+			pstm.setString(3, dto.getMyemail());
+			pstm.setInt(4, dto.getMyno());
+			System.out.println("03. query준비 : "+sql);
+			
+			res = pstm.executeUpdate();
+			System.out.println("04. query 실행 및 리턴");
+			
+			if(res>0) {
+				commit(con);
+			}else {
+				rollback(con);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("3/4 단계 에러");
+			e.printStackTrace();
+		}finally {
+			close(pstm);
+			close(con);
+			System.out.println("05. db 종료\n");
+		}
+		
+		return (res>0)?true:false;	//res가 1이면 true가 넘어간다. (res>0)?true:false
+		
+	}
 }
