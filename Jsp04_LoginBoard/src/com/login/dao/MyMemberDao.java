@@ -10,9 +10,11 @@ import java.util.List;
 import com.login.dto.MyMemberDto;
 
 import common.JDBCTemplate;
+import oracle.jdbc.proxy.annotation.Pre;
 
 
 public class MyMemberDao extends JDBCTemplate{
+	
 	//관리자 기능
 	//회원 전체 정보 조회
 	public List<MyMemberDto> selectAll(){
@@ -55,7 +57,41 @@ public class MyMemberDao extends JDBCTemplate{
 		return res;
 		
 	}
+	
+	//회원등급 조정
+	public boolean updateRole(int myno, String myrole) {
+		Connection con = getConnection();
+		PreparedStatement pstm = null;
+		int res = 0;
+		String sql = " UPDATE MYMEMBER SET MYROLE=? WHERE MYNO=? ";
 		
+		try {
+			pstm = con.prepareStatement(sql);
+			pstm.setString(1, myrole);
+			pstm.setInt(2, myno);
+			System.out.println("03. query 준비 : "+sql);
+			
+			res = pstm.executeUpdate();
+			System.out.println("04. query 실행 및 리턴");
+			
+			if(res>0) {
+				commit(con);
+			}else {
+				rollback(con);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("3/4단계 에러");
+			e.printStackTrace();
+		}finally {
+			close(pstm);
+			close(con);
+		}
+		return (res>0);
+	}
+		
+	
+	//회원기능
 	//로그인
 	public MyMemberDto login(String id, String pw) {
 		Connection con = getConnection();
@@ -162,6 +198,7 @@ public class MyMemberDao extends JDBCTemplate{
 		return res;
 		
 	}
+	
 	public MyMemberDto selectMember(int myno) {
 		Connection con = getConnection();
 		PreparedStatement pstm = null;
@@ -202,6 +239,7 @@ public class MyMemberDao extends JDBCTemplate{
 		return res;
 		
 	}
+	//회원정보 수정
 	public boolean updateMember(MyMemberDto dto) {
 		Connection con = getConnection();
 		PreparedStatement pstm = null;
@@ -238,4 +276,53 @@ public class MyMemberDao extends JDBCTemplate{
 		return (res>0)?true:false;	//res가 1이면 true가 넘어간다. (res>0)?true:false
 		
 	}
+	
+	//회원 탈퇴
+	public boolean deleteMember(int myno) {
+		Connection con = getConnection();
+		PreparedStatement pstm = null;
+		int res = 0;
+		
+		String sql = " UPDATE MYMEMBER SET MYENABLED='N' WHERE MYNO=? ";
+		
+		try {
+			pstm = con.prepareStatement(sql);
+			pstm.setInt(1, myno);
+			System.out.println("03. query 준비: "+sql);
+			
+			res = pstm.executeUpdate();
+			System.out.println("04. query 실행 및 리턴");
+			
+			if(res>0) {
+				commit(con);
+			}else {
+				rollback(con);
+			}
+			
+		} catch (SQLException e) {
+			 System.out.println("3/4번 에러");
+			e.printStackTrace();
+		}finally {
+			close(pstm);
+			close(con);
+			System.out.println("05. db 종료");
+		}
+		return (res>0);
+	}
+	
+	
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

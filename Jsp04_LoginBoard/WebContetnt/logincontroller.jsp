@@ -160,8 +160,40 @@
 		
 	}else if(command.equals("deleteuser")){
 		int myno = ((MyMemberDto)session.getAttribute("dto")).getMyno();
-		dao.deleteMember(myno);
-		//점심 td dao에 만들기.
+		boolean res = dao.deleteMember(myno);
+		
+		if(res){
+			request.setAttribute("msg", "탈퇴 성공");
+			request.setAttribute("url", "logincontroller.jsp?command=logout");
+		}else{
+			request.setAttribute("msg", "탈퇴 실패");
+			request.setAttribute("url", "usermain.jsp");
+		}
+		pageContext.forward("result.jsp");
+		
+	}else if(command.equals("updateroleform")){
+		int myno = Integer.parseInt(request.getParameter("myno"));
+		
+		MyMemberDto dto = dao.selectMember(myno);
+		
+		request.setAttribute("selectOne", dto);
+		pageContext.forward("updateroleform.jsp");
+		
+		
+	}else if(command.equals("updaterole")){
+		int myno = Integer.parseInt(request.getParameter("myno"));
+		String myrole = request.getParameter("myrole");
+		
+		boolean res = dao.updateRole(myno,myrole);
+		
+		if(res){
+			request.setAttribute("msg", "권한 변경 완료");
+			request.setAttribute("url", "");
+		}else{
+			request.setAttribute("msg", "권한 변경 실패");
+			request.setAttribute("url", "");
+		}
+		pageContext.forward("result.jsp");
 	}
 	
 %>

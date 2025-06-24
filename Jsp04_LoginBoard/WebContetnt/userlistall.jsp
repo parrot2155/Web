@@ -9,6 +9,38 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script type="text/javascript">
+	function updateRole(no){
+		//location.href="logincontroller.jsp?command=updateroleform&myno="+no;
+		
+		//form태그 생성
+		let form = document.createElement('form');
+		form.method='POST';
+		form.action='logincontroller.jsp'
+		//<form action='logincontroller.jsp' method='POST'></form>
+		
+		//input태그 생성
+		let command = document.createElement('input');
+		command.type='hidden';
+		command.name='command';
+		command.value='updateroleform';
+		
+		let myno = document.createElement("input");
+		myno.type='hidden';
+		myno.name='myno';
+		myno.value=no;
+		
+		
+		form.appendChild(command);
+		form.appendChild(myno);
+		
+		//body에 생성한 form태그 추가 후 submit 실행
+		document.body.appendChild(form);
+		form.submit();
+		
+	}
+	
+</script>
 </head>
 <body>
 <%
@@ -43,6 +75,7 @@
 		<td><%=dto.getMyemail() %></td>
 		<td><%=dto.getMyenabled().equals("Y")?"가입":"탈퇴 " %></td>
 		<td><%=dto.getMyrole() %></td>
+		<td><button onclick="updateRole(<%=dto.getMyno()%>)">변경</button></td>
 	</tr>
 <%
 	}
