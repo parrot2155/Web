@@ -187,11 +187,11 @@
 		boolean res = dao.updateRole(myno,myrole);
 		
 		if(res){
-			request.setAttribute("msg", "권한 변경 완료");
-			request.setAttribute("url", "");
+			request.setAttribute("msg", "회원 등급 변경 성공");
+			request.setAttribute("url", "logincontroller.jsp?command=userlistall");
 		}else{
-			request.setAttribute("msg", "권한 변경 실패");
-			request.setAttribute("url", "");
+			request.setAttribute("msg", "회원 등급 변경 실패");
+			request.setAttribute("url", "logincontroller.jsp?command=userlistall");
 		}
 		pageContext.forward("result.jsp");
 	}

@@ -86,6 +86,7 @@ public class MyMemberDao extends JDBCTemplate{
 		}finally {
 			close(pstm);
 			close(con);
+			System.out.println("05. db 종료\n");
 		}
 		return (res>0);
 	}
