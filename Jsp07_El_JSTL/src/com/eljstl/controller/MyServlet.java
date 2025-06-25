@@ -1,6 +1,8 @@
 package com.eljstl.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -22,12 +24,24 @@ public class MyServlet extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Score sc = new Score("박태욱", 100, 77, 56);
+		String command = request.getParameter("command");
 		
-		request.setAttribute("dto", sc);
+		if(command.equals("eltest")) {
+			Score sc = new Score("박태욱", 100, 77, 56);
+			request.setAttribute("dto", sc);
+			RequestDispatcher disp = request.getRequestDispatcher("eltest.jsp");
+			disp.forward(request, response);
+		}else if(command.equals("jstltest")) {
+			List<Score> res = new ArrayList<>();
+			for(int i=1;i<6;i++) {
+				Score tmp = new Score("이름"+i, 90+i, 80+i*2, 60+i*3);
+				res.add(tmp);
+			}
+			request.setAttribute("list", res);
+			RequestDispatcher disp = request.getRequestDispatcher("jstlpage.jsp");
+			disp.forward(request, response);
+		}
 		
-		RequestDispatcher disp = request.getRequestDispatcher("eltest.jsp");
-		disp.forward(request, response);
 		
 		
 	}
