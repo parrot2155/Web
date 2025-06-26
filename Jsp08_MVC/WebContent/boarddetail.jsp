@@ -36,6 +36,30 @@
 		<textarea rows="10" cols="40" readonly="readonly">${dto.content }</textarea>
 		</td>
 	</tr>
+	<tr>
+		<td colspan="2">
+			<input type="button" value="수정" onclick="location.href='controller.do?command=updateform&seq=${dto.seq }'">
+			<input type="button" value="삭제" onclick="confirmDele(${dto.seq});">
+		</td>
+	</tr>
 </table>
+<script type="text/javascript">
+	function confirmDele(seq){
+		if(window.confirm("삭제 하시겠습니까?")){
+			location.href="controller.do?command=delete&seq="+seq;
+		}
+	}
+</script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
