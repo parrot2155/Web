@@ -11,6 +11,8 @@ import java.util.List;
 
 import com.answer.dto.AnswerDto;
 
+import oracle.jdbc.proxy.annotation.Pre;
+
 
 public class AnswerDao {
 	
@@ -105,11 +107,115 @@ public class AnswerDao {
 		
 	}
 	
+	public int update(Connection con, AnswerDto dto) {
+		PreparedStatement pstm = null;
+		int res = 0;
+		String sql = " UPDATE ANSWERBOARD SET TITLE=?, CONTENT=? WHERE BOARDNO=? ";
+		
+		try {
+			pstm = con.prepareStatement(sql);
+			pstm.setString(1, dto.getTitle());
+			pstm.setString(2, dto.getContent());
+			pstm.setInt(3, dto.getBoardno());
+			System.out.println("03. query 준비: "+sql);
+			
+			res = pstm.executeUpdate();
+			System.out.println("04. query 실행 및 리턴");
+			
+		} catch (SQLException e) {
+			System.out.println("3/4단계 에러");
+			e.printStackTrace();
+		}finally {
+			close(pstm);
+		}
+		return res;
+	}
 	
+	public int updateAnswer(Connection con, int parentgroupno, int parentgroupsq) {
+		
+		PreparedStatement pstm = null;
+		int res = 0;
+		
+		String sql = " UPDATE ANSWERBOARD SET GROUPSQ = GROUPSQ+1 WHERE GROUPNO=? AND GROUPSQ>? ";
+		/* 예시
+		UPDATE ANSWERBOARD SET GROUPSQ = GROUPSQ+1 
+		WHERE GROUPNO = (SELECT GROUPNO FROM ANSWERBOARD WHERE BOARDNO=7)
+		AND GROUPSQ > (SELECT GROUPSQ FROM ANSWERBOARD WHERE BOARDNO=7);
+			*/	  
+		
+		try {
+			pstm = con.prepareStatement(sql);
+			pstm.setInt(1, parentgroupno);
+			pstm.setInt(2, parentgroupsq);
+			System.out.println("03. query 준비: "+sql);
+			
+			res = pstm.executeUpdate();
+			System.out.println("04. query 실행 및 종료");
+			
+		} catch (SQLException e) {
+			System.out.println("3/4단계 에러");
+			e.printStackTrace();
+		}finally {
+			close(pstm);
+		}
+		return res; 
+	}
 	
-	
-	
-	
+	public int insertAnswer(Connection con, AnswerDto dto) {
+		PreparedStatement pstm =null;
+		int res = 0;
+		String sql = "INSERT INTO ANSWERBOARD VALUES(BOARDNOSQ.NEXTVAL, ?, ?, ?, ?, ?, ?, SYSDATE)";
+		
+		try {
+			pstm = con.prepareStatement(sql);
+			pstm.setInt(1, dto.getGroupno());		//부모의 groupno
+			pstm.setInt(2, dto.getGroupsq()+1); 	//부모의 groupsq+1
+			pstm.setInt(3, dto.getTitletab()+2);	//부모의 titletab+2
+			pstm.setString(4, dto.getTitle());
+			pstm.setString(5, dto.getContent());
+			pstm.setString(6, dto.getWriter());
+			System.out.println("03. query 준비: "+sql);
+			
+			res = pstm.executeUpdate();
+			System.out.println("04. query 실행 및 종료");
+			
+		} catch (SQLException e) {
+			System.out.println("3/4단계 에러");
+			e.printStackTrace();
+		}finally{
+			close(pstm);
+		}
+		return res;
+	}
+	public int countUpdate(Connection con, int parentgroupno, int parentgroupsq) {
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		int res = 0;
+		String sql = " SELECT COUNT(*) FROM ANSWERBOARD WHERE GROUPNO=? AND GROUPSQ>? ";
+		
+		try {
+			pstm = con.prepareStatement(sql);
+			pstm.setInt(1, parentgroupno);
+			pstm.setInt(2, parentgroupsq);
+			System.out.println("03. query 준비 : "+sql);
+			
+			rs = pstm.executeQuery();
+			System.out.println("04. query 실행 및 리턴");
+			
+			while(rs.next()) {
+				res = rs.getInt(1);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("3/4단계 에러");
+			e.printStackTrace();
+		}finally {
+			close(rs);
+			close(pstm);
+		}	
+		return res;
+		
+	}
 	
 	
 	

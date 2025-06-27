@@ -77,9 +77,63 @@ public class AnswerController extends HttpServlet {
 
 			//3. 해당 페이지에서 준비된 데이터 화면에 출력(글번호, 작성자, 작성일, 제목, 내용)
 			
+	
+		}else if(command.equals("updateform")) {
+			int boardno = Integer.parseInt(request.getParameter("boardno"));
+			AnswerDto dto = service.selectOne(boardno); 
+			
+			request.setAttribute("dto", dto);
+			disp("boardupdate.jsp", request, response);
+			
+		}else if(command.equals("boardupdate")) {
+			int boardno = Integer.parseInt(request.getParameter("boardno"));
+			String title = request.getParameter("title");
+			String content = request.getParameter("content");
+			
+			AnswerDto dto = new AnswerDto();
+			dto.setBoardno(boardno);
+			dto.setTitle(title);
+			dto.setContent(content);
+			
+			int res = service.update(dto);
+			
+			if(res>0) {
+				request.setAttribute("msg", "글 수정 성공");
+				request.setAttribute("url", "answer?command=list");
+			}else {
+				request.setAttribute("msg", "글 수정 실패");
+				request.setAttribute("url", "answer?command=updateform&boardno="+boardno);
+			}
+			disp("result.jsp", request, response);
+			
+		}else if(command.equals("answerform")) {
+			int parentboardno = Integer.parseInt(request.getParameter("parentboardno"));
+			
+			request.setAttribute("parent", service.selectOne(parentboardno));
+			disp("answerwrite.jsp", request, response);
 			
 			
+		}else if(command.equals("answerwrite")) {
+			int parentboardno = Integer.parseInt(request.getParameter("parentboardno"));
+			String title = request.getParameter("title");
+			String content = request.getParameter("content");
+			String writer = request.getParameter("writer");
 			
+			AnswerDto dto = new AnswerDto();
+			dto.setTitle(title);
+			dto.setContent(content);
+			dto.setWriter(writer);
+			
+			boolean res = service.answerinsert(parentboardno, dto);
+			
+			if(res) {
+				request.setAttribute("msg", "답변 작성 성공");
+				request.setAttribute("url", "answer?command=list");
+			}else {
+				request.setAttribute("msg", "답변 작성 실패");
+				request.setAttribute("url", "answer?command=list");
+			}
+			disp("result.jsp", request, response);
 			
 		}
 		
