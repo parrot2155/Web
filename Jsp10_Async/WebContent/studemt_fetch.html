@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+	function getParam(){
+		let name = "name="+document.getElementById("name").value;
+		let kor = "kor="+document.getElementById("kor").value;
+		let eng = "eng="+document.getElementById("eng").value;
+		let math = "math="+document.getElementById("math").value;
+		
+		return "?"+name+"&"+kor+"&"+eng+"&"+math;
+	}
+	window.onload=() => {
+		document.getElementById("process").addEventListener("click",async ()=>{
+			try{
+				const response = await fetch("calc"+getParam());	//fetch를 통해서 비동기통신을 보낸다. 얘만 따로 백그라운드에서 동작을 한다.
+				console.log(response);
+				
+				const msg = await response.json();
+				console.log(msg);
+				document.getElementById("result").innerHTML = msg.name+"의 총점은"+msg.sum+"이고, 평균은 "+msg.avg+"입니다.";
+				
+			}catch(error){ 
+				alert("실패...");
+			}
+		});
+	}
+</script>
+</head>
+<body>
+	<h1>성적 입력</h1>
+	이름 : <input type="text" id="name"><br>
+	국어 : <input type="text" id="kor"><br>
+	영어 : <input type="text" id="eng"><br>
+	수학 : <input type="text" id="math"><br>
+	<input type="button" id="process" value="성적 처리"><br>
+	<hr>
+	<div id="result"></div>
+</body>
+</html>
