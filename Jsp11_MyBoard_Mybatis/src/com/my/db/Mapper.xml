@@ -3,8 +3,27 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.my.myboard">
+
   <select id="selectAll" resultType="MyBoardDto">
-    SELECT * FROM MYBOARD ORDER BY MYNO DESC;
+    SELECT * FROM MYBOARD ORDER BY MYNO DESC
   </select>
   
-</mapper>
+  <resultMap type="com.my.dto.MyBoardDto" id="mbMap">	<!-- 필드명이랑 가져올때 컬럼명이랑 다를때 이걸로 지정해주는거다. -->
+  		<result property="myno" column="MYNO" /> <!-- setter의 이름이라고 생각하면 된다. -->
+  		<result property="myname" column="MYNAME" />
+  		<result property="mytitle" column="MYTITLE" />
+  		<result property="mycontent" column="MYCONTENT" />
+  		<result property="mydate" column="MYDATE" />
+  </resultMap>
+  
+  <select id="selectOne" parameterType="int" resultMap="mbMap"> <!-- paraType->넘어오는 값 타입도 지정할 수 있다.       -->
+    SELECT * FROM MYBOARD WHERE MYNO=#{myno}
+  </select>
+  
+  <insert id="myinsert" parameterType="MyBoardDto"> <!-- paraType->넘어오는 값 타입도 지정할 수 있다.       -->
+    INSERT INTO MYBOARD VALUES(SEQ_MYBOARD.NEXTVAL, #{myname}, #{mytitle}, #{mycontent}, SYSDATE) 	<!-- #{}안에 dto.안써도 자동으로 찾아서 넣어준다. -->
+  </insert>
+  
+  
+  
+</mapper>  

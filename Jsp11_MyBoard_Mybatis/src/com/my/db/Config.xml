@@ -23,7 +23,7 @@
 	
 	<!-- Mapper 경로 -->
 	<mappers>
-		<mapper resource="com/my/db.Mapper.xml"/>
+		<mapper resource="com/my/db/Mapper.xml"/>
 	</mappers>
 </configuration>
 

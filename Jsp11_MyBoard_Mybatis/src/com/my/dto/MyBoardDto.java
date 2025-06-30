@@ -3,7 +3,7 @@ package com.my.dto;
 import java.util.Date;
 
 public class MyBoardDto {
-	private int myno;
+	private int myno;		//이름 바뀌면 인식 못한다.
 	private String myname;
 	private String mytitle;
 	private String mycontent;
