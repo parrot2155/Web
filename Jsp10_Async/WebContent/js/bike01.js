@@ -34,6 +34,11 @@ function getJson(){
 							"<td>"+str.cradle_count+"</td>"+
 							"<td>"+str.longitude+"</td>"+
 							"<td>"+str.latitude+"</td>"+
+							"<td>"+
+							"<input type='hidden' name='bike' value='"+
+							str.addr_gu+"/"+str.content_id+"/"+str.content_nm+"/"+str.new_addr+"/"+str.cradle_count+"/"+str.longitude+"/"+str.latitude+
+							"'>"+
+							"</td>"+
 						"</tr>"
 					);
 				}
