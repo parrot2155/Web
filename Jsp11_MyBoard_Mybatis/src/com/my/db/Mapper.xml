@@ -24,6 +24,35 @@
     INSERT INTO MYBOARD VALUES(SEQ_MYBOARD.NEXTVAL, #{myname}, #{mytitle}, #{mycontent}, SYSDATE) 	<!-- #{}안에 dto.안써도 자동으로 찾아서 넣어준다. -->
   </insert>
   
+  <update id="myupdate" parameterType="MyBoardDto">
+  		UPDATE MYBOARD SET MYTITLE=#{mytitle}, MYCONTENT=#{mycontent} WHERE MYNO=#{myno}
+  </update>
+  <delete id="mydelete" parameterType="int">
+  	DELETE FROM MYBOARD WHERE MYNO=#{myno}
+  </delete>
   
   
 </mapper>  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

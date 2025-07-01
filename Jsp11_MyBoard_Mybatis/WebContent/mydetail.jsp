@@ -29,6 +29,12 @@
 			<th>내용</th>
 			<td><textarea rows="10" cols="40" readonly="readonly">${dto.mycontent }</textarea></td>
 		</tr>
+		<tr>
+			<td colspan="2">
+				<input type="button" value="수정" onclick="location.href='myboard?command=updateform&myno=${dto.myno}'">
+				<input type="button" value="삭제" onclick="location.href='myboard?command=delete&myno=${dto.myno}'">
+			</td>
+		</tr>
 	</table>
 </body>
 </html>
