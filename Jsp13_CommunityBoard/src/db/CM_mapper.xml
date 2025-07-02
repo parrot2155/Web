@@ -9,7 +9,7 @@
 		<result property="pw" column="PW"/>
 		<result property="name" column="NAME"/>
 		<result property="phone" column="PHONE"/>
-	<result property="enabled" column="ENABLED"/>
+		<result property="enabled" column="ENABLED"/>
 	</resultMap>
 	
  	<insert id="signup" parameterType="com.cmember.dto.CMemberDto">
