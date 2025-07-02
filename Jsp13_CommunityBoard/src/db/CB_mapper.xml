@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.cboard">
+ 
+ 	<select id="selectAll" resultType="CBoardDto">
+ 		SELECT * FROM COMMUNITYBOARD
+ 	</select>
+ 	
+ 	<insert id="insert" parameterType="com.cboard.dto.CBoardDto">
+    	INSERT INTO COMMUNITYBOARD VALUES (SEQ_BOARD.NEXTVAL, #{name}, #{title}, #{content}, SYSDATE)
+  	</insert>
+  	
+  	<select id="selectOne" parameterType="int" resultType="CBoardDto">
+    	SELECT * FROM COMMUNITYBOARD WHERE NO = #{no}
+	</select>
+	<update id="update" parameterType="com.cboard.dto.CBoardDto">
+	    UPDATE COMMUNITYBOARD SET TITLE = #{title}, CONTENT = #{content} WHERE NO = #{no}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM COMMUNITYBOARD WHERE NO = #{no}
+	</delete>
+	
+	
+  
+ </mapper> 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
